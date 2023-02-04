@@ -47,10 +47,11 @@ class YoutubeAPI {
 
   Future<List<YouTubeVideo>> search(
     String query, {
-    String type =  'video,channel,playlist',
+    String type = 'video,channel,playlist',
     String order = 'relevance',
     String videoDuration = 'any',
     String? regionCode,
+    String? channelId,
   }) async {
     this.getTrending = false;
     this.query = query;
@@ -60,6 +61,7 @@ class YoutubeAPI {
       videoDuration: videoDuration,
       order: order,
       regionCode: regionCode,
+      channelId: channelId,
     );
     var res = await http.get(url, headers: headers);
     var jsonData = json.decode(res.body);

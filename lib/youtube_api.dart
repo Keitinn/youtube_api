@@ -135,7 +135,6 @@ class YoutubeAPI {
     await Future.forEach(videoList, (Video ytVideo) {
       YouTubeVideo? ytAPIObj =
           result.firstWhereOrNull((ytAPI) => ytAPI.id == ytVideo.id);
-      ytAPIObj?.duration = getDuration(ytVideo.duration ?? "") ?? "";
     });
     return result;
   }

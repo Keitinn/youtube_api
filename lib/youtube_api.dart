@@ -72,6 +72,11 @@ class YoutubeAPI {
 
     // resultのdescriptionをfetchVideoDescriptionで取得
     for (int i = 0; i < jsonData['items'].length; i++) {
+      // var duration = jsonData['items'][i]['contentDetails']['duration'];
+      // var viewCount = jsonData['items'][i]['statistics']['viewCount'];
+      // jsonData['items'][i]['contentDetails']['duration'] =
+      //     getDuration(duration);
+      // jsonData['items'][i]['statistics']['viewCount'] = viewCount;
       jsonData['items'][i]['snippet']['description'] =
           await fetchVideoDescription(
               jsonData['items'][i]['id']['videoId'], api!.key!);
@@ -107,6 +112,22 @@ class YoutubeAPI {
       return videoData['description'];
     } else {
       throw Exception('Failed to load video description');
+    }
+  }
+
+  // 動画の再生回数と再生時間を取得
+  Future<Video> fetchVideoDetail(String videoId, String apiKey) async {
+    final response = await http.get(
+      Uri.parse(
+          'https://www.googleapis.com/youtube/v3/videos?part=statistics,contentDetails&id=$videoId&key=${api!.key}'),
+    );
+
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      var videoData = data['items'][0];
+      return Video(videoData);
+    } else {
+      throw Exception('Failed to load video detail');
     }
   }
 

@@ -13,7 +13,8 @@ class YouTubeVideo {
   String? description;
   late String channelTitle;
   late String url;
-  String? duration;
+  String? duration; // 再生時間
+  int? viewCount; // 再生回数
 
   YouTubeVideo(dynamic data, {bool getTrendingVideo: false}) {
     thumbnail = Thumbnails.fromMap(data['snippet']['thumbnails']);

@@ -69,6 +69,14 @@ class YoutubeAPI {
       throw jsonData['error']['message'];
     }
     if (jsonData['pageInfo']['totalResults'] == null) return <YouTubeVideo>[];
+
+    // resultのdescriptionをfetchVideoDescriptionで取得
+    for (int i = 0; i < jsonData['items'].length; i++) {
+      jsonData['items'][i]['snippet']['description'] =
+          await fetchVideoDescription(
+              jsonData['items'][i]['id']['videoId'], api!.key!);
+    }
+
     List<YouTubeVideo> result = await _getResultFromJson(jsonData);
     return result;
   }
@@ -84,6 +92,22 @@ class YoutubeAPI {
     if (jsonData['pageInfo']['totalResults'] == null) return <YouTubeVideo>[];
     List<YouTubeVideo> result = await _getResultFromJson(jsonData);
     return result;
+  }
+
+  // 動画の概要を取得
+  Future<String> fetchVideoDescription(String videoId, String apiKey) async {
+    final response = await http.get(
+      Uri.parse(
+          'https://www.googleapis.com/youtube/v3/videos?part=snippet&id=$videoId&key=$apiKey'),
+    );
+
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      var videoData = data['items'][0]['snippet'];
+      return videoData['description'];
+    } else {
+      throw Exception('Failed to load video description');
+    }
   }
 
   /*

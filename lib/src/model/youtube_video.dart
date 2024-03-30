@@ -1,4 +1,6 @@
 import 'package:youtube_api/src/model/thumbnails.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class YouTubeVideo {
   late Thumbnails thumbnail;
